@@ -1,0 +1,14 @@
+<h1>New Submission</h1>
+
+<%= form_for :submission do |f| %>
+	<%= f.label :guess1 %>
+	<%= f.select(:guess1, ['one', 'two', 'three']) %>
+
+	<%= f.label :guess2 %>
+	<%= f.select(:guess2, ['one', 'two', 'three']) %>
+
+	<%= f.label :guess3 %>
+	<%= f.select(:guess3, ['one', 'two', 'three']) %>
+<% end %>
+
+<button>Submit your guesses.</button>
