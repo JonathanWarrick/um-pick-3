@@ -11,17 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150129053442) do
+ActiveRecord::Schema.define(version: 20150129062718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "guesses", force: :cascade do |t|
     t.integer  "submission_id"
+    t.integer  "song_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
 
+  add_index "guesses", ["song_id"], name: "index_guesses_on_song_id", using: :btree
+  add_index "guesses", ["submission_id", "song_id"], name: "index_guesses_on_submission_id_and_song_id", unique: true, using: :btree
   add_index "guesses", ["submission_id"], name: "index_guesses_on_submission_id", using: :btree
 
   create_table "shows", force: :cascade do |t|
@@ -63,6 +66,5 @@ ActiveRecord::Schema.define(version: 20150129053442) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "guesses", "submissions"
   add_foreign_key "submissions", "users"
 end

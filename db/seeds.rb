@@ -47,3 +47,12 @@ Submission.first.guesses.create(song_id: Song.find_by(song_name: 'Anchor Drops')
 Submission.last.guesses.create(song_id: Song.find_by(song_name: 'Resolution').id)
 Submission.last.guesses.create(song_id: Song.find_by(song_name: 'In The Kitchen').id)
 Submission.last.guesses.create(song_id: Song.find_by(song_name: '1348').id)
+
+# Find songs guessed by first User
+# songs_guessed = Submission.first.songs
+
+# Find songs played at first Show
+# songs_played = Show.first.songs
+
+# Return matches
+# songs_guessed.where(song_name: songs_played.map{|song| song.song_name})
