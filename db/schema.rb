@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150129000645) do
+ActiveRecord::Schema.define(version: 20150129000928) do
+
+  create_table "guesses", force: :cascade do |t|
+    t.integer  "submission_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "guesses", ["submission_id"], name: "index_guesses_on_submission_id"
 
   create_table "submissions", force: :cascade do |t|
     t.datetime "created_at", null: false
