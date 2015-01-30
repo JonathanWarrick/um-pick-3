@@ -1,5 +1,7 @@
 import scrapy
 
+from atu_scraping.items import ATUScrapingItem
+
 class CatalogSpider(scrapy.Spider):
 	name = "catalog"
 	allowed_domains = ["allthings.umphreys.com"]
@@ -18,10 +20,10 @@ class CatalogSpider(scrapy.Spider):
 
 	def parse(self, response):
 		for sel in response.xpath('//*[@id="songtable"]/tbody'):
-			song_name = sel.xpath('tr/td[1]/a/text()')
-			song_artist = sel.xpath('tr/td[2]/text()')
-			times_played = sel.xpath('tr/td[3]/text()')
-			debut_date = sel.xpath('tr/td[4]/a/text()')
-			last_played_date = sel.xpath('tr/td[5]/a/text()')
-
-			print song_name, song_artist, times_played, debut_date, last_played_date
+			item = ATUScrapingItem()
+			item['song_name'] = sel.xpath('tr/td[1]/a/text()').extract()
+			item['song_artist'] = sel.xpath('tr/td[2]/text()').extract()
+			item['times_played'] = sel.xpath('tr/td[3]/text()').extract()
+			item['debut_date'] = sel.xpath('tr/td[4]/a/text()').extract()
+			item['last_played_date'] = sel.xpath('tr/td[5]/a/text()').extract()
+			yield item

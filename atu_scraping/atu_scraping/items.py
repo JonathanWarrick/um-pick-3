@@ -8,7 +8,7 @@
 import scrapy
 
 
-class AtuScrapingItem(scrapy.Item):
+class ATUScrapingItem(scrapy.Item):
   # UM catalog
   song_name = scrapy.Field()
   song_artist = scrapy.Field()

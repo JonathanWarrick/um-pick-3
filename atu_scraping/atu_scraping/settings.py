@@ -11,7 +11,12 @@
 BOT_NAME = 'atu_scraping'
 
 SPIDER_MODULES = ['atu_scraping.spiders']
-NEWSPIDER_MODULE = 'atu_scraping.spiders'
 
-# Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'atu_scraping (+http://www.yourdomain.com)'
+DATABASE = {
+	'drivername': 'postgres',
+	'host': 'localhost',
+	'port': '5432',
+	'database': 'test_um_pick_3'
+}
+
+ITEM_PIPELINES = ['atu_scraping.pipelines.CatalogPipeline']
