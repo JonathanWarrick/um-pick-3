@@ -5,21 +5,21 @@
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/items.html
 
-import scrapy
+from scrapy.item import Item, Field
 
 
-class ATUScrapingItem(scrapy.Item):
+class ATUScrapingItem(Item):
   # UM catalog
-  song_name = scrapy.Field()
-  song_artist = scrapy.Field()
-  times_played = scrapy.Field()
-  debut_date = scrapy.Field()
-  last_played_date = scrapy.Field()
+  song_name = Field()
+  song_artist = Field()
+  times_played = Field()
+  debut_date = Field()
+  last_played_date = Field()
 
   # UM show
-  show_date = scrapy.Field()
-  venue = scrapy.Field()
-  city = scrapy.Field()
-  state = scrapy.Field()
-  country = scrapy.Field()
-  song_played = scrapy.Field()
+  # show_date = Field()
+  # venue = Field()
+  # city = Field()
+  # state = Field()
+  # country = Field()
+  # song_played = Field()
