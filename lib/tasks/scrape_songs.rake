@@ -43,6 +43,8 @@ task :scrape_shows => :environment do
 		songs_played = show.css("> p a").map do |song|
 			song.text
 		end
+
+		songs_played.uniq! unless songs_played.length === songs_played.uniq.length
 		
 		# Save to database!
 		Show.create(date_of_show: date_of_show,
@@ -51,5 +53,19 @@ task :scrape_shows => :environment do
 			          show_state: show_state,
 			          show_country: show_country,
 			          songs_played: songs_played)
+
+		# Save to Show/Song join table!
+		# THIS WILL CAUSE ISSUES WITH TWO SHOWS ON A DATE (NEED TIME)
+		current_show = Show.find_by(date_of_show: date_of_show)
+		songs_played.each do |song|
+			puts "1 #{song}"
+			if song.length < 35
+			  current_show.song_shows.create(song_id: Song.find_by(song_name: song).id)
+			else
+				altered_song = song[0...30]
+				puts "2 #{altered_song}"
+				current_show.song_shows.create(song_id: Song.find_by("song_name LIKE ?", "%#{altered_song}%").id)
+			end
+		end
 	end
 end
