@@ -14,8 +14,12 @@ task :scrape_songs => :environment do
 		debut_date = song.at_css("td:nth-child(4) a").text
 		last_played_date = song.at_css("td:nth-child(5) a").text
 
-		puts "The song #{song_name} by #{song_artist} has been played #{times_played} times, first on #{debut_date}, and most recently on #{last_played_date}."
-		# Song.create(song_name: song_name)
+		# Save to database!
+		Song.create(song_name: song_name, 
+			          song_artist: song_artist, 
+			          times_played: times_played,
+			          debut_date: debut_date,
+			          last_played_date: last_played_date)
 	end
 end
 
@@ -30,15 +34,22 @@ task :scrape_shows => :environment do
 
 	# Loop through each row in table, getting information
 	doc.css(".setlist").each do |show|
-		date_of_show = show.at_css(".setlistdate").text
+		date_of_show = Date.strptime(show.at_css(".setlistdate").text, '%m.%d.%Y')
+		puts date_of_show
 		show_venue = show.at_css(".venue").text
 		show_city = show.at_css("a:nth-child(3)").text
 		show_state = show.at_css("a:nth-child(4)").text
 		show_country = show.at_css("a:nth-child(5)").text
-		songs = show.css("> p a").map do |song|
+		songs_played = show.css("> p a").map do |song|
 			song.text
 		end
-		puts "On #{date_of_show} at #{show_venue} these songs were played #{songs}"
-		puts "BREAK"
+		
+		# Save to database!
+		Show.create(date_of_show: date_of_show,
+			          show_venue: show_venue,
+			          show_city: show_city,
+			          show_state: show_state,
+			          show_country: show_country,
+			          songs_played: songs_played)
 	end
 end

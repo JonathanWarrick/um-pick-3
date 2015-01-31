@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150129062718) do
+ActiveRecord::Schema.define(version: 20150131035633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,10 +28,14 @@ ActiveRecord::Schema.define(version: 20150129062718) do
   add_index "guesses", ["submission_id"], name: "index_guesses_on_submission_id", using: :btree
 
   create_table "shows", force: :cascade do |t|
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.datetime "date_of_show"
-    t.string   "location_of_show"
+    t.string   "show_venue"
+    t.string   "show_city"
+    t.string   "show_state"
+    t.string   "show_country"
+    t.text     "songs_played",              array: true
   end
 
   create_table "song_shows", force: :cascade do |t|
@@ -46,9 +50,13 @@ ActiveRecord::Schema.define(version: 20150129062718) do
   add_index "song_shows", ["song_id"], name: "index_song_shows_on_song_id", using: :btree
 
   create_table "songs", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.string   "song_name"
+    t.string   "song_artist"
+    t.integer  "times_played"
+    t.datetime "debut_date"
+    t.datetime "last_played_date"
   end
 
   create_table "submissions", force: :cascade do |t|
