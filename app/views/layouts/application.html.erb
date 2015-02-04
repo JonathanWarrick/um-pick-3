@@ -2,12 +2,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Umphrey's Pick 3 | <%= yield(:title) %></title>
+  <title><%= provide_title(yield(:title)) %></title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js">
+    </script>
+  <![endif]-->
 </head>
 <body>
-  <%= yield %>
+	<header class="navbar navbar-inverse">
+		<div class="container">
+			<%= link_to "Home", "#", id: "logo" %>
+			<nav>
+				<ul class="nav navbar-nav navbar-right">
+					<li><%= link_to "Sign-Up", "#" %></li>
+					<li><%= link_to "Log-In", "#" %></li>
+					<li><%= link_to "Leaderboard", "#" %></li>
+					<li><%= link_to "Shows", "#" %></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<div class="container">
+		<h1 class="center">why is this so hard?</h1>
+  	<%= yield %>
+  </div>
 </body>
 </html>
