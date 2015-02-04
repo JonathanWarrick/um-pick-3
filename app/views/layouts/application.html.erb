@@ -1,14 +1,13 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-  <title>UmPick3</title>
+  <title>Umphrey's Pick 3 | <%= yield(:title) %></title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<%= yield %>
-
+  <%= yield %>
 </body>
 </html>
