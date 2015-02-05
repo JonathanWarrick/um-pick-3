@@ -7,17 +7,32 @@
   text-align: center;
 }
 
-/* homepage background */
-
-body { 
-	background: url('um-pick-3-background.jpg') no-repeat center center fixed; 
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+/* logo */
+#logo {
+	float: left;
+	font-size: 2em;
 }
 
+/* homepage background */
+
+// body { 
+// 	background: url('um-pick-3-background.jpg') no-repeat center center fixed; 
+// 	-webkit-background-size: cover;
+// 	-moz-background-size: cover;
+// 	-o-background-size: cover;
+// 	background-size: cover;
+// }
+
 /* header */
-.navbar.navbar-inverse {
-  background: rgba(0,0,0,0.5);
+// .navbar.navbar-inverse {
+//   background: rgba(0,0,0,0.5);
+// }
+
+/* footer */
+.footer {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	height: 60px;
+	background-color: light blue;
 }
