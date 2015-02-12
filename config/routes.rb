@@ -1,9 +1,14 @@
 Rails.application.routes.draw do
+  get 'sessions/new'
+
   get 'users/new'
 
   root 'static_pages#home'
-  get  'contact' => 'static_pages#contact'
-  get  'signup'  => 'users#new'
+  get    'contact' => 'static_pages#contact'
+  get    'signup'  => 'users#new'
+  get    'login'   => 'sessions#new' # page for a new session
+  post   'login'   => 'sessions#create' # create a new session
+  delete 'logout'  => 'sessions#destroy' # delete a session
 
   resources :submissions
   resources :users
