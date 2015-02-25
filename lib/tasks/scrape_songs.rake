@@ -69,3 +69,46 @@ task :scrape_shows => :environment do
 		end
 	end
 end
+
+task :scrape_all_shows => :environment do
+	require 'nokogiri'
+	require 'open-uri'
+
+	# Link to setlits page
+	(1998..2015).to_a.each do |year|
+		url = "http://allthings.umphreys.com/setlists/#{year}.html"
+		doc = Nokogiri::HTML(open(url))
+		song_root_url = "http://allthings.umphreys.com/song"
+
+		# Loop through each row in table, getting information
+		doc.css(".setlist").each do |show|
+			date_of_show = Date.strptime(show.at_css(".setlistdate").text, '%m.%d.%Y')
+			# puts date_of_show
+			# puts show.css("> p a")[0].text
+			# if date_of_show = "2013-02-17"
+			# 	binding.pry
+			# end
+			if ![Date.new(2006,05,21), Date.new(2009,02,21), Date.new(1998,12,17), Date.new(1998,12,18), Date.new(1999,02,18), Date.new(1999,02,25), Date.new(1999,02,26), Date.new(2001,9,22), Date.new(2001,12,11), Date.new(2002,10,8)].include? date_of_show
+				if date_of_show == Date.new(2003,3,17)
+					puts "Date: 2003-03-17, First Song: When the World Is Running Down You Make the Best of What's Still Around, Arist: The Police"
+				else
+					first_song_played = show.css("> p a")[0].text
+					# # puts first_song_played
+
+
+					song_info = Song.find_by_song_name(first_song_played)
+					if song_info[:song_artist] != "Umphrey's McGee" && song_info[:song_artist] != "Ali Baba's Tahini" && song_info[:song_artist] != "Karl Engelmann"
+						puts "Date: #{date_of_show}, First Song: #{song_info[:song_name]}, Artist: #{song_info[:song_artist]}"
+					end
+				end
+			end
+			# if !song_info
+			# 	puts 'HELP ME'
+			# else
+			# 	if !["Umphrey's McGee", "Ali Baba's Tahini"].include? song_info[:song_artist]
+			# 		puts date_of_show
+			# 	end
+			# end
+		end
+	end
+end
