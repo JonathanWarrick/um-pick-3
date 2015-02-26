@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150225012354) do
+ActiveRecord::Schema.define(version: 20150226210218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,8 +19,10 @@ ActiveRecord::Schema.define(version: 20150225012354) do
   create_table "guesses", force: :cascade do |t|
     t.integer  "submission_id"
     t.integer  "song_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.boolean  "is_cover",      default: false
+    t.boolean  "is_opener",     default: false
   end
 
   add_index "guesses", ["song_id"], name: "index_guesses_on_song_id", using: :btree
@@ -63,6 +65,7 @@ ActiveRecord::Schema.define(version: 20150225012354) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "user_id"
+    t.integer  "show_id"
   end
 
   add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree

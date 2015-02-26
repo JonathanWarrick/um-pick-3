@@ -6,47 +6,101 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-# Populate Songs List
-# Song.create(song_name: 'Resolution')
-# Song.create(song_name: 'Believe The Lie')
-# Song.create(song_name: 'Anchor Drops')
-# Song.create(song_name: 'Hurt Bird Bath')
-# Song.create(song_name: "Miss Tinkle's Overture")
-# Song.create(song_name: "Mulche's Odyssey")
-# Song.create(song_name: "1348")
-# Song.create(song_name: "#5")
-# Song.create(song_name: "In The Kitchen")
-# Song.create(song_name: "Domino Theory")
+# Populate Users List
+User.create(name: 'Jonathan Warrick', email: 'Jonathan@Test.com', password: 'testing123', password_confirmation: 'testing123')
+User.create(name: 'Danny Warrick', email: 'Danny@Test.com', password: 'testing123', password_confirmation: 'testing123')
+User.create(name: 'Jim Warrick', email: 'Jim@Test.com', password: 'testing123', password_confirmation: 'testing123')
+User.create(name: 'Carole Warrick', email: 'Carole@Test.com', password: 'testing123', password_confirmation: 'testing123')
+User.create(name: 'Alana Irwin', email: 'Alana@Test.com', password: 'testing123', password_confirmation: 'testing123')
 
-# # Populate Users List
-# User.create(name: 'Jonathan Warrick', email: 'Jonathan@Test.com')
-# User.create(name: 'Danny Warrick', email: 'Danny@Test.com')
-# User.create(name: 'Jim Warrick', email: 'Jim@Test.com')
-# User.create(name: 'Carole Warrick', email: 'Carole@Test.com')
+# Populate Guesses for First 5 Shows - Jonathan
+# Define current_user
+current_user = User.find_by_email('Jonathan@Test.com')
 
-# # Populate Shows List
-# Show.create(date_of_show: Time.zone.now - 1.day, location_of_show: "New York, NY")
-# Show.create(date_of_show: Time.zone.now - 4.day, location_of_show: "Baltimore, MD")
-# Show.create(date_of_show: Time.zone.now - 1.month, location_of_show: "Los Angeles, CA")
+# None Right
+current_user.submissions.create({:show_id => 1})
+current_submission = current_user.submissions.find_by_show_id(1)
+current_submission.guesses.create({:song_id => Song.find_by_song_name('All Things Ninja').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Hurt Bird Bath').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('August').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Southern Cross').id})
 
-# # Populate Song_Shows List
-# Show.first.song_shows.create(song_id: Song.find_by(song_name: 'Resolution').id)
-# Show.first.song_shows.create(song_id: Song.find_by(song_name: 'Hurt Bird Bath').id)
-# Show.first.song_shows.create(song_id: Song.find_by(song_name: 'In The Kitchen').id)
-# Show.first.song_shows.create(song_id: Song.find_by(song_name: '#5').id)
+# First Right
+current_user.submissions.create({:show_id => 2})
+current_submission = current_user.submissions.find_by_show_id(2)
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Uncle Wally').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Hangover').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Prowler').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Lively Up Yourself').id})
 
-# # # Populate Submissions List
-# User.first.submissions.create
-# User.last.submissions.create
+# Second Right
+current_user.submissions.create({:show_id => 3})
+current_submission = current_user.submissions.find_by_show_id(3)
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Uncle Wally').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Bridgeless').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Prowler').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Lively Up Yourself').id})
 
-# # # Populate Guesses List
-# Submission.first.guesses.create(song_id: Song.find_by(song_name: 'Hurt Bird Bath').id)
-# Submission.first.guesses.create(song_id: Song.find_by(song_name: 'Believe the Lie').id)
-# Submission.first.guesses.create(song_id: Song.find_by(song_name: 'Anchor Drops').id)
+# Third Right
+current_user.submissions.create({:show_id => 4})
+current_submission = current_user.submissions.find_by_show_id(4)
+current_submission.guesses.create({:song_id => Song.find_by_song_name('The Crooked One').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Dump City').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Wappy Sprayberry').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Lively Up Yourself').id})
 
-# Submission.last.guesses.create(song_id: Song.find_by(song_name: 'Resolution').id)
-# Submission.last.guesses.create(song_id: Song.find_by(song_name: 'In The Kitchen').id)
-# Submission.last.guesses.create(song_id: Song.find_by(song_name: '1348').id)
+# Cover Right
+current_user.submissions.create({:show_id => 5})
+current_submission = current_user.submissions.find_by_show_id(5)
+current_submission.guesses.create({:song_id => Song.find_by_song_name('The Crooked One').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Dump City').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Resolution').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name("Let's Dance").id})
+
+# Populate Guesses for First 5 Shows - Danny
+# Define current_user
+current_user = User.find_by_email('Jonathan@Test.com')
+# Two Right
+current_user.submissions.create({:show_id => 1})
+current_submission = current_user.submissions.find_by_show_id(1)
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Hangover').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Sociable Jimmy').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('August').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Southern Cross').id})
+
+# Three Right (BONUS)
+current_user.submissions.create({:show_id => 2})
+current_submission = current_user.submissions.find_by_show_id(2)
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Higgins').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('2x2').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Push the Pig').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Immigrant Song').id})
+
+# All Right (BONUS)
+current_user.submissions.create({:show_id => 3})
+current_submission = current_user.submissions.find_by_show_id(3)
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Professor Wormbog').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Cemetery Walk').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Cemetery Walk II').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Led Boots').id})
+
+# All Right + First Right (BONUS)
+current_user.submissions.create({:show_id => 4})
+current_submission = current_user.submissions.find_by_show_id(4)
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Puppet String').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Bad Friday').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('1348').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Live and Let Die').id})
+
+# First Right (BONUS)
+current_user.submissions.create({:show_id => 4})
+current_submission = current_user.submissions.find_by_show_id(4)
+current_submission.guesses.create({:song_id => Song.find_by_song_name('You Got the Wrong Guy').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Bad Friday').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('1348').id})
+current_submission.guesses.create({:song_id => Song.find_by_song_name('Live and Let Die').id})
+
+
 
 # # Find songs guessed by first User
 # # songs_guessed = Submission.first.songs
