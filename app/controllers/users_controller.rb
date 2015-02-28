@@ -6,6 +6,9 @@ class UsersController < ApplicationController
 
   def show
   	@user = User.find(params[:id])
+    @submissions = @user.submissions
+    @shows = Show.all
+    @songs = Song.all
   end
 
   def create
@@ -18,6 +21,10 @@ class UsersController < ApplicationController
   	else
   		render 'new'
   	end
+  end
+
+  def index
+    @users = User.all
   end
 
   private

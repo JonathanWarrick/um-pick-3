@@ -1,0 +1,7 @@
+<table>
+	<% @submissions.each do |submission| %>
+		<tr>
+			<td><%= User.find(submission.user_id).name %></td>
+		</tr>
+	<% end %>
+</table>

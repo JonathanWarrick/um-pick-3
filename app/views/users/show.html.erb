@@ -1,1 +1,21 @@
-<%= @user.name %>, <%= @user.email %>
+<%= @user.name %>, <%= @user.email %>, <%= @user.total_score %>
+<table>
+	<tr>
+		<th>Show</th>
+		<th>Song 1</th>
+		<th>Song 2</th>
+		<th>Song 3</th>
+		<th>Cover</th>
+		<th>Score</th>
+	</tr>
+	<% @submissions.each do |submission| %>
+	  <tr>
+	  	<td><%= @shows.find_by_id(submission.show_id).date_of_show %></td>
+	  	<% submission.guesses.each do |guess| %>
+	  	  <td><%= @songs.find_by_id(guess.song_id).song_name %></td>
+	  	<% end %>
+	  	<td><%= submission.submission_score %></td>
+	  </tr>
+	<% end %>
+</table>
+

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150226210218) do
+ActiveRecord::Schema.define(version: 20150228223230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,14 +30,15 @@ ActiveRecord::Schema.define(version: 20150226210218) do
   add_index "guesses", ["submission_id"], name: "index_guesses_on_submission_id", using: :btree
 
   create_table "shows", force: :cascade do |t|
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.datetime "date_of_show"
     t.string   "show_venue"
     t.string   "show_city"
     t.string   "show_state"
     t.string   "show_country"
-    t.text     "songs_played",              array: true
+    t.text     "songs_played",                              array: true
+    t.boolean  "is_graded",    default: false
   end
 
   create_table "song_shows", force: :cascade do |t|
@@ -62,10 +63,12 @@ ActiveRecord::Schema.define(version: 20150226210218) do
   end
 
   create_table "submissions", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.integer  "user_id"
     t.integer  "show_id"
+    t.boolean  "is_graded",        default: false
+    t.integer  "submission_score", default: 0
   end
 
   add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
@@ -73,10 +76,11 @@ ActiveRecord::Schema.define(version: 20150226210218) do
   create_table "users", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.string   "password_digest"
     t.string   "remember_digest"
+    t.integer  "total_score",     default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
