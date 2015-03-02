@@ -2,20 +2,20 @@
 
 <%= form_for :submission, url: submissions_path do |f| %>
 
-	<%= f.label :date_of_show, "Upcoming Show" %>
+	<%= f.label :date_of_show %>
 	<%= f.select(:date_of_show, @upcoming_shows) %>
 
-	<%= f.label :guess1, "Song 1" %>
+	<%= f.label :guess1 %>
 	<%= f.select(:guess1, @um_songs) %>
 
-	<%= f.label :guess2, "Song 2" %>
+	<%= f.label :guess2 %>
 	<%= f.select(:guess2, @um_songs) %>
 
-	<%= f.label :guess3, "Song 3" %>
+	<%= f.label :guess3 %>
 	<%= f.select(:guess3, @um_songs) %>
 
-	<%= f.label :guess4, "Cover" %>
-	<%= f.select(:guess4, @cover_songs) %>
+	<%= f.label :cover %>
+	<%= f.select(:cover, @cover_songs) %>
 
 	<%= f.submit "Submit Guesses", class: "btn btn-primary" %>
 <% end %>
