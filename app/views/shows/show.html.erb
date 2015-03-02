@@ -1,7 +1,20 @@
-<table>
+<h3>Show: <%= @show.date_of_show %></h3>
+<table class="table table-striped">
+	<tr>
+		<th>Show</th>
+		<th>Song 1</th>
+		<th>Song 2</th>
+		<th>Song 3</th>
+		<th>Cover</th>
+		<th>Score</th>
+	</tr>
 	<% @submissions.each do |submission| %>
 		<tr>
 			<td><%= User.find(submission.user_id).name %></td>
+			<% submission.guesses.each do |guess| %>
+	  	  <td><%= @songs.find_by_id(guess.song_id).song_name %></td>
+	  	<% end %>
+	  	<td><%= submission.submission_score %></td>
 		</tr>
 	<% end %>
 </table>

@@ -1,5 +1,5 @@
-<%= @user.name %>, <%= @user.email %>, <%= @user.total_score %>
-<table>
+<h3>User: <%= @user.name %></h3>
+<table class="table table-striped">
 	<tr>
 		<th>Show</th>
 		<th>Song 1</th>
@@ -17,5 +17,12 @@
 	  	<td><%= submission.submission_score %></td>
 	  </tr>
 	<% end %>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td><%= @user.total_score %></td>
 </table>
 

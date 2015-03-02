@@ -6,5 +6,6 @@ class ShowsController < ApplicationController
 	def show
 		@show = Show.find(params[:id])
 	  @submissions = @show.submissions.where(:show_id => @show.id)
+	  @songs = Song.all
 	end
 end
