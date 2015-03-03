@@ -17,7 +17,7 @@ class UsersController < ApplicationController
       log_in @user
       flash[:success] = "Welcome to Umphrey's Pick 3!"
       # Could also be redirect_to user_url(@user) but Rails knows better
-  		redirect_to @user
+  		redirect_to shows
   	else
   		render 'new'
   	end

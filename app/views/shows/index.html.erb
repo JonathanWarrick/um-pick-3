@@ -1,7 +1,20 @@
-<table>
+<table class="table table-striped">
+	<tr>
+		<th>Show Date</th>
+		<th>Show Venue</th>
+		<th>Show Location</th>
+		<th>All Things Umphrey's Link</th>
+		<th>Total Submissions</th>
+		<th>Link to Submissions</th>
+	</tr>
 	<% @shows.each do |show| %>
 		<tr>
 			<td><%= show.date_of_show %></td>
+			<td><%= show.show_venue %></td>
+			<td><%= "#{show.show_city}, #{show.show_state}, #{show.show_country}" %></td>
+			<td>LINK</td>
+			<td><%= show.submissions.count %></td>
+			<td><%= link_to "Submissions", show %></td>
 		</tr>
 	<% end %>
 </table>
