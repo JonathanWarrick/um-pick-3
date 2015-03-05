@@ -112,7 +112,6 @@ task :scrape_upcoming_shows => :environment do
 end
 
 task :score_shows => :environment do
-	binding.pry
 	# Find all shows that have happened, but have not yet been graded
 	# Should only be one per day when this is all up and running
 	Show.where(:is_graded => false, :has_happened => true).each do |show|
@@ -154,6 +153,7 @@ task :score_shows => :environment do
 			         (originals_correct === 3 && covers_correct === 1 ? 5 : 0)
 
 			submission.update_attributes(:is_graded => true, :submission_score => total_score)
+			submission.user.update_attribute(:total_score, submission.user.total_score + total_score)
 		end
 		show.update_attribute(:is_graded, true)
 	end 
