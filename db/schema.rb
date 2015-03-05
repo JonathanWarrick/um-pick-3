@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150305184522) do
+ActiveRecord::Schema.define(version: 20150305194926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20150305184522) do
     t.datetime "updated_at",                    null: false
     t.boolean  "is_cover",      default: false
     t.boolean  "is_opener",     default: false
+    t.boolean  "is_correct",    default: false
   end
 
   add_index "guesses", ["song_id"], name: "index_guesses_on_song_id", using: :btree
@@ -40,13 +41,15 @@ ActiveRecord::Schema.define(version: 20150305184522) do
     t.text     "songs_played", default: [],                 array: true
     t.boolean  "is_graded",    default: false
     t.time     "time_of_show"
+    t.boolean  "has_happened", default: false
   end
 
   create_table "song_shows", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "song_id"
     t.integer  "show_id"
+    t.boolean  "is_opener",  default: false
   end
 
   add_index "song_shows", ["show_id"], name: "index_song_shows_on_show_id", using: :btree

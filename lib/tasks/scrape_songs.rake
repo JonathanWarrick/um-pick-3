@@ -111,6 +111,54 @@ task :scrape_upcoming_shows => :environment do
 	end
 end
 
+task :score_shows => :environment do
+	binding.pry
+	# Find all shows that have happened, but have not yet been graded
+	# Should only be one per day when this is all up and running
+	Show.where(:is_graded => false, :has_happened => true).each do |show|
+		# Find all submissions for the given show
+		show.submissions.each do |submission|
+			
+			total_score = 0
+			originals_correct = 0
+			covers_correct = 0
+			opener_correct = false
+			
+			# Loop through each guess for each submission
+			submission.guesses.each do |guess|
+				# Check if song was played
+				current_guess_song = show.song_shows.find_by_song_id(guess.song_id)
+				if !current_guess_song.nil?
+					guess.update_attribute(:is_correct, true)
+					# Check if guess was original
+					if !guess.is_cover
+						originals_correct += 1
+					end
+					
+					# Check if guess was opener
+					if current_guess_song.is_opener && guess.is_opener
+						opener_correct = true
+					end
+
+					# Check if guess was cover
+					if guess.is_cover
+						covers_correct += 1
+					end
+				end
+			end
+
+			total_score += (originals_correct * 3) + 
+			         (covers_correct * 5) + 
+			         (opener_correct ? 2 : 0) +
+			         (originals_correct === 3 ? 5 : 0) +
+			         (originals_correct === 3 && covers_correct === 1 ? 5 : 0)
+
+			submission.update_attributes(:is_graded => true, :submission_score => total_score)
+		end
+		show.update_attribute(:is_graded, true)
+	end 
+end
+
 task :scrape_all_shows => :environment do
 	require 'nokogiri'
 	require 'open-uri'
