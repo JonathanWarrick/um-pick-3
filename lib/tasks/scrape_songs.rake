@@ -23,7 +23,7 @@ task :scrape_songs => :environment do
 	end
 end
 
-task :scrape_shows => :environment do
+task :scrape_past_shows => :environment do
 	require 'nokogiri'
 	require 'open-uri'
 
@@ -65,6 +65,47 @@ task :scrape_shows => :environment do
 				altered_song = song[0...30]
 				puts "2 #{altered_song}"
 				current_show.song_shows.create(song_id: Song.find_by("song_name LIKE ?", "%#{altered_song}%").id)
+			end
+		end
+	end
+end
+
+task :scrape_upcoming_shows => :environment do
+	require 'nokogiri'
+	require 'open-uri'
+
+	# Link to setlits page
+	url = "http://umphreys.com/tour/"
+	doc = Nokogiri::HTML(open(url))
+
+	# Loop through each upcoming show, getting information
+	doc.css(".clearfix").each do |show|
+		# Need to account for:
+		  # No time (CHECK!)
+		  # Multiple Dates
+		  # Multiple Shows on a Date
+		  # Non-UM (CHECK!)
+		  # Non-US (WAIT AND SEE)
+		if show.at_css(".nonUmphs").nil?
+			date_of_show = DateTime.parse(show.at_css(".when > h2").text)
+			show_venue = show.at_css(".where > h2 > a").text
+			city_state = show.at_css(".where > h3").text
+			show_city = city_state[0...(city_state.length - 4)]
+			show_state = city_state[(city_state.length - 2)...city_state.length]
+			time = show.at_css(".time > h2")
+			time_of_show = time.nil? ? nil : Time.parse(time.text)
+			# time_of_show = !nil? show.at_css(".time > h2") ? Time.parse(show.at_css(".time > h2").text) : nil
+
+			# puts "On #{date_of_show} at #{time_of_show} in #{show_city}, #{show_state} at #{show_venue}."
+			if !Show.find_by_date_of_show_and_show_venue_and_show_city_and_show_state(date_of_show, show_venue, show_city, show_state)
+				puts "Show on #{date_of_show} in #{show_city} created!"
+				Show.create(date_of_show: date_of_show,
+     			          show_venue: show_venue,
+		    	          show_city: show_city,
+			              show_state: show_state,
+			              time_of_show: time_of_show)
+			else
+				puts 'Show already exists'
 			end
 		end
 	end

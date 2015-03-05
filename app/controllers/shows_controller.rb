@@ -1,6 +1,7 @@
 class ShowsController < ApplicationController
 	def index
-		@shows = Show.all.order(:date_of_show => :asc)
+		@shows = Show.all.order(:date_of_show =>
+		 :asc)
 	end
 
 	def show

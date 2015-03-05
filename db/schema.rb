@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150228223230) do
+ActiveRecord::Schema.define(version: 20150305184522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,9 +36,10 @@ ActiveRecord::Schema.define(version: 20150228223230) do
     t.string   "show_venue"
     t.string   "show_city"
     t.string   "show_state"
-    t.string   "show_country"
-    t.text     "songs_played",                              array: true
+    t.string   "show_country", default: "USA"
+    t.text     "songs_played", default: [],                 array: true
     t.boolean  "is_graded",    default: false
+    t.time     "time_of_show"
   end
 
   create_table "song_shows", force: :cascade do |t|
