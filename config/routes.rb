@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'static_pages#home'
+  root 'sessions#new'
   get    'contact' => 'static_pages#contact'
   get    'how_to_play' => 'static_pages#how_to_play'
   get    'signup'  => 'users#new'
