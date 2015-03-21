@@ -201,3 +201,162 @@ task :scrape_all_shows => :environment do
 		end
 	end
 end
+
+task :segue_builder => :environment do
+	require 'nokogiri'
+	require 'open-uri'
+
+	# Link to setlits page
+	bad_shows = 0
+	segues = {}
+	(1998..2015).to_a.each do |year|
+		url = "http://allthings.umphreys.com/setlists/#{year}.html"
+		doc = Nokogiri::HTML(open(url))
+
+		# Loop through each row in table, getting information
+		doc.css(".setlist").each do |show|
+			date_of_show = Date.strptime(show.at_css(".setlistdate").text, '%m.%d.%Y')
+			if ![Date.new(2006,05,21), Date.new(2009,02,21), Date.new(1998,12,17), Date.new(1998,12,18), Date.new(1999,02,18), Date.new(1999,02,25), Date.new(1999,02,26), Date.new(2001,9,22), Date.new(2001,12,11), Date.new(2002,10,8)].include? date_of_show
+				segues = []
+				show.css("> p").each do |set|
+					set.children.each do |x|
+
+						if [',  ', ' -> ', ' >  '].include? x.text
+							segues.push(x.text)
+						end
+					end
+				end
+
+				songs_played = show.css("> p a").map do |song|
+					song.text
+				end
+
+				if songs_played.length - show.css("> p").length + js_jazz_ct != segues.length
+					bad_shows += 1
+				end				
+
+				if songs_played.length - show.css("> p").length + js_jazz_ct != segues.length
+					bad_shows += 1
+				end				
+			end
+		end
+	end
+end
+
+task :scrape_first_song_played => :environment do
+	require 'nokogiri'
+	require 'open-uri'
+
+	mapping = {}
+
+	# Link to setlits page
+	(1998..2015).to_a.each do |year|
+		url = "http://allthings.umphreys.com/setlists/#{year}.html"
+		doc = Nokogiri::HTML(open(url))
+
+		# Loop through each row in table, getting information
+		doc.css(".setlist").each do |show|
+			date_of_show = Date.strptime(show.at_css(".setlistdate").text, '%m.%d.%Y')
+			if ![Date.new(2006,05,21), Date.new(2009,02,21), Date.new(1998,12,17), Date.new(1998,12,18), Date.new(1999,02,18), Date.new(1999,02,25), Date.new(1999,02,26), Date.new(2001,9,22), Date.new(2001,12,11), Date.new(2002,10,8)].include? date_of_show
+				first_song_played = show.css("> p a")[0].text
+				if !mapping[first_song_played] 
+					mapping[first_song_played] = 1
+				else
+					mapping[first_song_played] += 1
+				end
+			end
+			# if !song_info
+			# 	puts 'HELP ME'
+			# else
+			# 	if !["Umphrey's McGee", "Ali Baba's Tahini"].include? song_info[:song_artist]
+			# 		puts date_of_show
+			# 	end
+			# end
+		end
+	end
+	song_array = []
+	mapping.each do |k, v|
+		song_array.push([k, v])
+	end
+	song_array.sort! {|x,y| y[1] <=> x[1]}
+	puts song_array
+	show_count = song_array.map do |group| group[1] end.reduce(:+)
+	puts show_count
+end
+
+task :scrape_no_covers => :environment do
+	require 'nokogiri'
+	require 'open-uri'
+
+	shows_with_no_covers = []
+	# Link to setlits page
+	(1998..2015).to_a.each do |year|
+		url = "http://allthings.umphreys.com/setlists/#{year}.html"
+		doc = Nokogiri::HTML(open(url))
+		song_root_url = "http://allthings.umphreys.com/song"
+		
+		# Loop through each row in table, getting information
+		doc.css(".setlist").each do |show|
+			no_covers = true
+			date_of_show = Date.strptime(show.at_css(".setlistdate").text, '%m.%d.%Y')
+			if ![Date.new(2006,05,21), Date.new(2009,02,21), Date.new(1998,12,17), Date.new(1998,12,18), Date.new(1999,02,18), Date.new(1999,02,25), Date.new(1999,02,26), Date.new(2001,9,22), Date.new(2001,12,11), Date.new(2002,10,8)].include? date_of_show
+				# Remove one-set shows
+				if show.css("> p .setlabel")[0].text != "One Set:"
+					show.css("> p a").each do |song|
+						if !['Ride Wit Me', 'Elderly Woman Behind the Counter in a Small Town', 'Goonville', 'Christmas Song', 'You and You Alone', 'On Your Way Down', 'Santa Claus Is Coming to Town', 'Breaking The Girl', "Rockin' Around the Christmas Tree", 'The Christmas Song', 'Winter Wonderland', 'She', 'Life By the Drop', 'Karma Police', 'Simple Gifts', 'Have Yourself a Merry Little Christmas', "Travelin' Man", 'So Far Away', 'Space Odyssey', "She's Always a Woman", "The Only Living Boy In New York", "Who's Loving You", "Can't Get It Out of My Head", 'Never Tear Us Apart', 'Drift Away'].include? song.text
+							song_info = Song.find_by_song_name(song.text)
+							if song_info[:song_artist] != "Umphrey's McGee" && song_info[:song_artist] != "Ali Baba's Tahini" && song_info[:song_artist] != "Karl Engelmann" && song_info[:song_artist] != "Tashi Station"
+								no_covers = false
+								puts "Date: #{date_of_show}, Cover Played: #{song_info[:song_name]}, Artist: #{song_info[:song_artist]}"
+							end
+						end
+					end
+					if no_covers
+						shows_with_no_covers.push(date_of_show)
+					end
+				end
+			end
+		end
+	end
+	puts shows_with_no_covers
+end
+
+task :most_played_2015 => :environment do
+	require 'nokogiri'
+	require 'open-uri'
+
+	# Link to setlits page
+	url = "http://allthings.umphreys.com/setlists/2015.html"
+	doc = Nokogiri::HTML(open(url))
+	song_root_url = "http://allthings.umphreys.com/song"
+	song_count = {}
+
+	# Loop through each row in table, getting information
+	doc.css(".setlist").each do |show|
+		date_of_show = Date.strptime(show.at_css(".setlistdate").text, '%m.%d.%Y')
+		puts date_of_show
+		show_venue = show.at_css(".venue").text
+		show_city = show.at_css("a:nth-child(3)").text
+		show_state = show.at_css("a:nth-child(4)").text
+		show_country = show.at_css("a:nth-child(5)").text
+		songs_played = show.css("> p a").map do |song|
+			song.text
+		end
+
+		songs_played.uniq! unless songs_played.length === songs_played.uniq.length
+
+		songs_played.each do |song|
+			if !song_count[song]
+				song_count[song] = 1
+			else 
+				song_count[song] += 1
+			end
+		end
+	end
+	song_array = []
+	song_count.each do |k, v|
+		song_array.push([k, v])
+	end
+	song_array.sort! {|x,y| y[1] <=> x[1]}
+	puts song_array
+end
