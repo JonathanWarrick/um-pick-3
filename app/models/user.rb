@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
 	validates :email, presence: true, 
 	  format: { with: VALID_EMAIL_REGEX },
 	  uniqueness: { case_sensitive: false } # Refer to section 6.2 re: database indices
-  validates :password, length: { minimum: 6 }
+  validates :password, length: { minimum: 6 }, allow_blank: true
 
   has_secure_password
 

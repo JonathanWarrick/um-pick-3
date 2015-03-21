@@ -31,6 +31,8 @@ gem 'bcrypt', '~> 3.1.7'
 
 gem 'rest_client'
 
+gem 'faker'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
