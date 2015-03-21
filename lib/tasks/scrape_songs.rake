@@ -1,6 +1,7 @@
 task :scrape_songs => :environment do
 	require 'nokogiri'
 	require 'open-uri'
+	require 'mechanize'
 
 	# Link to songs page
 	url = "http://allthings.umphreys.com/song/"
@@ -14,12 +15,29 @@ task :scrape_songs => :environment do
 		debut_date = song.at_css("td:nth-child(4) a").text
 		last_played_date = song.at_css("td:nth-child(5) a").text
 
-		# Save to database!
-		Song.create(song_name: song_name, 
-			          song_artist: song_artist, 
-			          times_played: times_played,
-			          debut_date: debut_date,
-			          last_played_date: last_played_date)
+		# Check if song already exists in database
+		if !Song.find_by_song_name(song_name).nil?
+			# Update times_played, last_played_date
+			Song.find_by_song_name(song_name).update_attributes(:times_played => times_played, :last_played_date => last_played_date)
+
+
+		# Else, check if it's an abbreviation thing
+		else 
+			@agent = Mechanize.new
+			actual_song_name = @agent.get(url).links_with(:text => song_name)[0].click.search(".splashtitle").text.gsub("Songs > ", "")
+			if !Song.find_by_song_name(actual_song_name).nil?
+				puts "Abbreviated Song: #{actual_song_name}"
+				Song.find_by_song_name(actual_song_name).update_attributes(:times_played => times_played, :last_played_date => last_played_date)
+			else 
+				# Save to database!
+				puts "New Song: #{song_name}"
+				Song.create(song_name: song_name, 
+					          song_artist: song_artist, 
+					          times_played: times_played,
+					          debut_date: debut_date,
+					          last_played_date: last_played_date)
+			end
+		end
 	end
 end
 
