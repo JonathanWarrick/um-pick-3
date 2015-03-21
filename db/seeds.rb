@@ -7,11 +7,11 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 # Populate Users List
-User.create(name: 'Jonathan Warrick', email: 'Jonathan@Test.com', password: 'testing123', password_confirmation: 'testing123', admin: true)
-User.create(name: 'Danny Warrick', email: 'Danny@Test.com', password: 'testing123', password_confirmation: 'testing123')
-User.create(name: 'Jim Warrick', email: 'Jim@Test.com', password: 'testing123', password_confirmation: 'testing123')
-User.create(name: 'Carole Warrick', email: 'Carole@Test.com', password: 'testing123', password_confirmation: 'testing123')
-User.create(name: 'Alana Irwin', email: 'Alana@Test.com', password: 'testing123', password_confirmation: 'testing123')
+User.create(name: 'Jonathan Warrick', email: 'Jonathan@Test.com', password: 'testing123', password_confirmation: 'testing123', admin: true, activated: true, activated_at: Time.zone.now)
+User.create(name: 'Danny Warrick', email: 'Danny@Test.com', password: 'testing123', password_confirmation: 'testing123', activated: true, activated_at: Time.zone.now)
+User.create(name: 'Jim Warrick', email: 'Jim@Test.com', password: 'testing123', password_confirmation: 'testing123', activated: true, activated_at: Time.zone.now)
+User.create(name: 'Carole Warrick', email: 'Carole@Test.com', password: 'testing123', password_confirmation: 'testing123', activated: true, activated_at: Time.zone.now)
+User.create(name: 'Alana Irwin', email: 'Alana@Test.com', password: 'testing123', password_confirmation: 'testing123', activated: true, activated_at: Time.zone.now)
 
 # Populate Guesses for First 5 Shows - Jonathan
 # Define current_user

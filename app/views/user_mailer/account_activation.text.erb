@@ -1,0 +1,5 @@
+Hello <%= @user.name %>,
+
+Welcome to Umphrey's Pick 3!  Click on the link below to activation your account and get started!
+
+<%= edit_account_activation_url(@user.activation_token, email: @user.email) %>
