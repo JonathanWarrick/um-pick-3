@@ -42,7 +42,11 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.all.order(total_score: :desc)
+    @users = User.all.order(name: :asc)
+  end
+
+  def leaderboard
+    @users = User.all.order(total_score: :desc) 
   end
 
   def destroy

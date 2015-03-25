@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get    'login'   => 'sessions#new' # page for a new session
   post   'login'   => 'sessions#create' # create a new session
   delete 'logout'  => 'sessions#destroy'
+  get    'leaderboard' => 'users#leaderboard'
 
   resources :submissions
   resources :users

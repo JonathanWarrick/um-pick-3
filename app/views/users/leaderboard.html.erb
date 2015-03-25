@@ -1,0 +1,15 @@
+<h3>Leaderboard</h3>
+<table class="table table-striped">
+	<tr>
+		<th>User</th>
+		<th>Total Score</th>
+		<th>Shows Submitted</th>
+	</tr>
+	<% @users.each do |user| %>
+		<tr>
+			<td><%= link_to user.name, user %></td>
+			<td><%= user.total_score %></td>
+			<td><%= user.submissions.count %></td>
+		</tr>
+	<% end %>
+</table>

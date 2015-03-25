@@ -75,14 +75,15 @@ task :scrape_past_shows => :environment do
 		# Save to Show/Song join table!
 		# THIS WILL CAUSE ISSUES WITH TWO SHOWS ON A DATE (NEED TIME)
 		current_show = Show.find_by(date_of_show: date_of_show)
-		songs_played.each do |song|
+		songs_played.each_with_index do |song, index|
+			opener_flag = index == 0 ? true : false
 			puts "1 #{song}"
 			if song.length < 35
-			  current_show.song_shows.create(song_id: Song.find_by(song_name: song).id)
+			  current_show.song_shows.create(song_id: Song.find_by(song_name: song).id, is_opener: opener_flag)
 			else
 				altered_song = song[0...30]
 				puts "2 #{altered_song}"
-				current_show.song_shows.create(song_id: Song.find_by("song_name LIKE ?", "%#{altered_song}%").id)
+				current_show.song_shows.create(song_id: Song.find_by("song_name LIKE ?", "%#{altered_song}%").id, is_opener: opener_flag)
 			end
 		end
 	end
