@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   post   'login'   => 'sessions#create' # create a new session
   delete 'logout'  => 'sessions#destroy'
   get    'leaderboard' => 'users#leaderboard'
+  get    'choose_show' => 'submissions#choose_show'
+  post   'new_or_existing' => 'submissions#new_or_existing'
 
   resources :submissions
   resources :users

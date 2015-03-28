@@ -9,12 +9,16 @@
 	</tr>
 	<% @shows.each do |show| %>
 		<tr>
-			<td><%= show.date_of_show %></td>
+			<td><%= show.date_of_show.strftime("%m/%d/%Y") %></td>
 			<td><%= show.show_venue %></td>
 			<td><%= "#{show.show_city}, #{show.show_state}, #{show.show_country}" %></td>
 			<td>LINK</td>
 			<td><%= show.submissions.count %></td>
-			<td><%= link_to "Submissions", show %></td>
+			<% if show.is_graded %>
+				<td><%= link_to "Scores", show %></td>
+			<% else %>
+			  <td><%= link_to "Create / Edit Picks", new_submission_path %></td>
+			<% end %>
 		</tr>
 	<% end %>
 </table>

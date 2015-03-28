@@ -1,4 +1,4 @@
-<h3>Show: <%= @show.date_of_show %></h3>
+<h3><%= "#{@show.date_of_show.strftime("%m/%d/%Y")} - #{@show.show_city}, #{@show.show_state}" %></h3>
 <table class="table table-striped">
 	<tr>
 		<th>Show</th>
@@ -8,13 +8,16 @@
 		<th>Cover</th>
 		<th>Score</th>
 	</tr>
-	<% @submissions.each do |submission| %>
+	<% @submissions.order(submission_score: :desc).each do |submission| %>
 		<tr>
 			<td><%= User.find(submission.user_id).name %></td>
-			<% submission.guesses.each do |guess| %>
-	  	  <td><%= @songs.find_by_id(guess.song_id).song_name %></td>
+			<% submission.guesses.order(is_opener: :desc, is_cover: :asc).each do |guess| %>
+	  	  <td class="<%= guess.is_correct ? 
+	  	      guess.is_opener && 
+	  	      @songs.find_by_id(guess.song_id).song_name == Show.find_by_id(submission.show_id).songs_played[0] ? 'correct-guess-opener' : 'correct-guess' :
+	  	    '' %>"><%= @songs.find_by_id(guess.song_id).song_name %></td>
 	  	<% end %>
-	  	<td><%= submission.submission_score %></td>
+	  	<td class="<%= submission.guesses.where('is_correct = true').count == 4 ? 'correct-all-total' : submission.guesses.where('is_correct = true and is_cover = false').count == 3 ? 'correct-all-um' : '' %>"><%= submission.submission_score %></td>
 		</tr>
 	<% end %>
 </table>

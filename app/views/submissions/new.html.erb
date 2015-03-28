@@ -1,21 +1,19 @@
 <h1>New Submission</h1>
+<h1><%= @date_of_show %></h1>
 
 <%= form_for :submission, url: submissions_path do |f| %>
 
-	<%= f.label :date_of_show %>
-	<%= f.select(:date_of_show, @upcoming_shows) %>
-
 	<%= f.label :guess1 %>
-	<%= f.select(:guess1, @um_songs) %>
+	<%= f.select(:guess1, @um_songs, :selected => @um_songs[0]) %>
 
 	<%= f.label :guess2 %>
-	<%= f.select(:guess2, @um_songs) %>
+	<%= f.select(:guess2, @um_songs, :selected => @um_songs[1]) %>
 
 	<%= f.label :guess3 %>
-	<%= f.select(:guess3, @um_songs) %>
+	<%= f.select(:guess3, @um_songs, :selected => @um_songs[2]) %>
 
 	<%= f.label :cover %>
-	<%= f.select(:cover, @cover_songs) %>
+	<%= f.select(:cover, @cover_songs, :selected => @cover_songs[2]) %>
 
 	<%= f.submit "Submit Guesses", class: "btn btn-primary" %>
 <% end %>

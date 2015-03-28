@@ -95,3 +95,19 @@ table {
     text-align: center;
   }
 }
+
+.correct-guess {
+  border: 2px solid green;
+}
+
+.correct-guess-opener {
+  border: 2px solid blue;
+}
+
+.correct-all-um {
+  border: 2px solid yellow;
+}
+
+.correct-all-total {
+  border: 2px solid orange;
+}

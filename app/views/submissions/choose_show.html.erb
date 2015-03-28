@@ -1,0 +1,9 @@
+<h1>Choose Show - New/Edit Submission</h1>
+
+<%= form_for :submission, url: {action: "new_or_existing"} do |f| %>
+
+	<%= f.label :date_of_show %>
+	<%= f.select(:date_of_show, @upcoming_shows) %>
+
+	<%= f.submit "Choose Show", class: "btn btn-primary" %>
+<% end %>

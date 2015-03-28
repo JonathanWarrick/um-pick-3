@@ -61,6 +61,7 @@ task :scrape_past_shows => :environment do
 		songs_played = show.css("> p a").map do |song|
 			song.text
 		end
+		atu_link = "allthings.umphreys.com#{show.at_css(".setlistdate").href}"
 
 		songs_played.uniq! unless songs_played.length === songs_played.uniq.length
 		
@@ -70,7 +71,8 @@ task :scrape_past_shows => :environment do
 			          show_city: show_city,
 			          show_state: show_state,
 			          show_country: show_country,
-			          songs_played: songs_played)
+			          songs_played: songs_played,
+			          atu_link: atu_link)
 
 		# Save to Show/Song join table!
 		# THIS WILL CAUSE ISSUES WITH TWO SHOWS ON A DATE (NEED TIME)
@@ -122,7 +124,8 @@ task :scrape_upcoming_shows => :environment do
      			          show_venue: show_venue,
 		    	          show_city: show_city,
 			              show_state: show_state,
-			              time_of_show: time_of_show)
+			              time_of_show: time_of_show,
+			              atu_link: url)
 			else
 				puts 'Show already exists'
 			end

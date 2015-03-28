@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-	has_many :submissions
+	has_many :submissions, dependent: :destroy
 
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save :downcase_email
@@ -71,6 +71,11 @@ class User < ActiveRecord::Base
   # Returns true if a password reset has expired.
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
+  end
+
+  def submitted_guesses(date_of_show)
+    @show_id = Show.find_by_date_of_show(date_of_show).id
+    return self.submissions.where(show_id: @show_id)
   end
 
   private

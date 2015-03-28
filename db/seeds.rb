@@ -101,11 +101,12 @@
 # current_submission.guesses.create({:song_id => Song.find_by_song_name('Live and Let Die').id, :is_opener => false, :is_cover => true})
 
 # Create smaller list of songs to be used
+# Covers are 5, 32, 412
 valid_song_ids = [58, 69, 9, 163, 210, 212, 217, 220, 228, 229, 234, 403, 427, 398, 429, 447, 455, 421, 455, 423, 422, 5, 32, 412]
 
 # Create fake, past shows
-25.times do
-	date_of_show = Faker::Date.between(1500.days.ago, 1300.days.ago)
+40.times do
+	date_of_show = Faker::Date.between(1500.days.ago, 300.days.ago)
 	show_venue = Faker::Lorem.word.capitalize
 	show_city = Faker::Address.city
 	show_state = Faker::Address.state_abbr
@@ -125,7 +126,8 @@ valid_song_ids = [58, 69, 9, 163, 210, 212, 217, 220, 228, 229, 234, 403, 427, 3
 		          show_country: show_country,
 		          is_graded: is_graded,
 		          has_happened: has_happened,
-		          songs_played: songs_played)
+		          songs_played: songs_played,
+		          atu_link: "http://allthings.umphreys.com/setlists/?date=2015-03-21")
 
 	current_show = Show.find_by(date_of_show: date_of_show)
 	songs_played.each_with_index do |song, index|
@@ -141,10 +143,28 @@ end
 	email = Faker::Internet.email
 	password = Faker::Internet.password(8)
 	password_confirmation = password
-	activated: true
-	activated_at: Time.zone.now
+	activated = true
+	activated_at = Time.zone.now
 
 	User.create(name: name, email: email, password: password, password_confirmation: password_confirmation, activated: activated, activated_at: activated_at)
+
+	# Find current user
+	current_user = User.find_by_email(email)
+
+	# Loop through fake shows
+	shows = Show.where("date_of_show < '12-31-2014'")
+	shows.each do |show|
+		# Skip certain, random shows
+		random_seed = rand(0..100)
+		if !random_seed.between?(20, 30)
+			current_user.submissions.create({:show_id => show.id})
+			current_submission = current_user.submissions.find_by_show_id(show.id)
+			current_submission.guesses.create({:song_id => valid_song_ids[0..6].sample, :is_opener => true, :is_cover => false})
+			current_submission.guesses.create({:song_id => valid_song_ids[7..13].sample, :is_opener => false, :is_cover => false})
+			current_submission.guesses.create({:song_id => valid_song_ids[14..20].sample, :is_opener => false, :is_cover => false})
+			current_submission.guesses.create({:song_id => valid_song_ids[21..23].sample, :is_opener => false, :is_cover => true})
+		end
+	end
 end
 
 # # Find songs guessed by first User

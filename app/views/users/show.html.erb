@@ -10,11 +10,17 @@
 	</tr>
 	<% @submissions.each do |submission| %>
 	  <tr>
-	  	<td><%= @shows.find_by_id(submission.show_id).date_of_show %></td>
-	  	<% submission.guesses.each do |guess| %>
-	  	  <td><%= @songs.find_by_id(guess.song_id).song_name %></td>
+	  	<td>
+	  		<% current_show = @shows.find_by_id(submission.show_id) %>
+	  		<% formatted_date_of_show = current_show.date_of_show.strftime("%m/%d/%Y") %>
+	  		<%= "#{formatted_date_of_show} - #{current_show.show_city}, #{current_show.show_state}" %></td>
+	  	<% submission.guesses.order(is_opener: :desc, is_cover: :asc).each do |guess| %>
+	  	  <td class="<%= guess.is_correct ? 
+	  	      guess.is_opener && 
+	  	      @songs.find_by_id(guess.song_id).song_name == Show.find_by_id(submission.show_id).songs_played[0] ? 'correct-guess-opener' : 'correct-guess' :
+	  	    '' %>"><%= @songs.find_by_id(guess.song_id).song_name %></td>
 	  	<% end %>
-	  	<td><%= submission.submission_score %></td>
+	  	<td class="<%= submission.guesses.where('is_correct = true').count == 4 ? 'correct-all-total' : submission.guesses.where('is_correct = true and is_cover = false').count == 3 ? 'correct-all-um' : '' %>"><%= submission.submission_score %></td>
 	  </tr>
 	<% end %>
 	<tr>
