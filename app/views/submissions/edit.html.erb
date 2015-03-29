@@ -1,0 +1,22 @@
+<h1>Edit Submission</h1>
+<h1><%= @date_of_show %></h1>
+
+<%= form_for(@submission) do |f| %>
+
+	<%= f.label :guess1 %>
+	<%= f.select(:guess1, @um_songs, :selected => @um_songs[@um_songs.index Song.find(@guesses[0].song_id).song_name]) %>
+
+	<%= f.label :guess2 %>
+	<%= f.select(:guess2, @um_songs, :selected => @um_songs[@um_songs.index Song.find(@guesses[1].song_id).song_name]) %>
+
+	<%= f.label :guess3 %>
+	<%= f.select(:guess3, @um_songs, :selected => @um_songs[@um_songs.index Song.find(@guesses[2].song_id).song_name]) %>
+
+	<%= f.label :cover %>
+	<%= f.select(:cover, @cover_songs, :selected => @cover_songs[@cover_songs.index Song.find(@guesses[3].song_id).song_name]) %>
+
+	<%= hidden_field_tag(:date_of_show, @date_of_show) %>
+
+	<%= f.submit "Save Changes", class: "btn btn-primary" %>
+<% end %>
+

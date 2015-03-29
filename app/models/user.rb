@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
 
   def submitted_guesses(date_of_show)
     @show_id = Show.find_by_date_of_show(date_of_show).id
-    return self.submissions.where(show_id: @show_id)
+    return self.submissions.find_by_show_id(@show_id)
   end
 
   private

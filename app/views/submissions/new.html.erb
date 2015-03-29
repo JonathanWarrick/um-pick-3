@@ -15,6 +15,8 @@
 	<%= f.label :cover %>
 	<%= f.select(:cover, @cover_songs, :selected => @cover_songs[2]) %>
 
+	<%= hidden_field_tag(:date_of_show, @date_of_show) %>
+
 	<%= f.submit "Submit Guesses", class: "btn btn-primary" %>
 <% end %>
 
