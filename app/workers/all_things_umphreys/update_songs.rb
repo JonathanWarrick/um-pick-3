@@ -7,7 +7,7 @@ module AllThingsUmphreys
     include Sidekiq::Worker
     include Sidetiq::Schedulable
 
-    recurrence { minutely }
+    recurrence { hourly(4) }
 
     def initialize
       # Link to songs page
