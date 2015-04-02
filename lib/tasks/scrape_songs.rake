@@ -1,64 +1,10 @@
-task :scrape_songs => :environment do
-	require 'nokogiri'
-	require 'open-uri'
-	require 'mechanize'
-
-	# Link to songs page
-	url = "http://allthings.umphreys.com/song/"
-	doc = Nokogiri::HTML(open(url))
-
-	# Loop through each row in table, getting information
-	doc.css("#songtable tbody tr").each do |song|
-		song_name = song.at_css("td:nth-child(1) a").text
-		song_artist = song.at_css("td:nth-child(2)").text
-		times_played = song.at_css("td:nth-child(3)").text
-		debut_date = song.at_css("td:nth-child(4) a").text
-		last_played_date = song.at_css("td:nth-child(5) a").text
-
-		# Check if song already exists in database
-		if !Song.find_by_song_name(song_name).nil?
-			# Update times_played, last_played_date
-			Song.find_by_song_name(song_name).update_attributes(:times_played => times_played, :last_played_date => last_played_date)
-
-
-		# Else, check if it's an abbreviation thing
-		else 
-			@agent = Mechanize.new
-			actual_song_name = @agent.get(url).links_with(:text => song_name)[0].click.search(".splashtitle").text.gsub("Songs > ", "")
-			if !Song.find_by_song_name(actual_song_name).nil?
-				puts "Abbreviated Song: #{actual_song_name}"
-				Song.find_by_song_name(actual_song_name).update_attributes(:times_played => times_played, :last_played_date => last_played_date)
-			else 
-				# Save to database!
-				puts "New Song: #{song_name}"
-				Song.create(song_name: song_name, 
-					          song_artist: song_artist, 
-					          times_played: times_played,
-					          debut_date: debut_date,
-					          last_played_date: last_played_date)
-			end
-		end
-	end
-end
-
 task :scrape_past_shows => :environment do
 	require 'nokogiri'
 	require 'open-uri'
 
-	# Link to setlits page
-	url = "http://allthings.umphreys.com/setlists/2015.html"
-	doc = Nokogiri::HTML(open(url))
-	song_root_url = "http://allthings.umphreys.com/song"
-
 	# Loop through each row in table, getting information
 	doc.css(".setlist").each do |show|
-		date_of_show = Date.strptime(show.at_css(".setlistdate").text, '%m.%d.%Y')
-		puts date_of_show
-		show_venue = show.at_css(".venue").text
-		show_city = show.at_css("a:nth-child(3)").text
-		show_state = show.at_css("a:nth-child(4)").text
-		show_country = show.at_css("a:nth-child(5)").text
-		songs_played = show.css("> p a").map do |song|
+		
 			song.text
 		end
 		atu_link = "allthings.umphreys.com#{show.at_css(".setlistdate").href}"
