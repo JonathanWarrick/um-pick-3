@@ -17,18 +17,26 @@ module AllThingsUmphreys
       # Loop through each row in table, getting information
       @doc.css(".setlist").each do |show|
         show_info = get_show_info(show)
+        Show.where().first_or_create.update(show_info)
+        Song.where(:song_name => song_info[:song_name]).first_or_create.update(song_info)
       end
     end
 
     def get_show_info(show)
+      songs_played = show.css("> p a").map do |song|
+        song.text
+      end
+
       show_object = {
         :date_of_show => Date.strptime(show.at_css(".setlistdate").text, '%m.%d.%Y'),
         :show_venue => show.at_css(".venue").text,
         :show_city => show.at_css("a:nth-child(3)").text,
         :show_state => show.at_css("a:nth-child(4)").text,
         :show_country => show.at_css("a:nth-child(5)").text,
-        :songs_played => show.css("> p a").map do |song|
+        :songs_played => songs_played.uniq! || songs_played,
+        :atu_link => "allthings.umphreys.com#{show.at_css(".setlistdate").href}"
       }
+      show_object
     end
 
     def populate_setlist_info
@@ -44,7 +52,7 @@ end
 
 
     #     song_info = get_song_info(song)
-    #     Song.where(:song_name => song_info[:song_name]).first_or_create.update(song_info)
+        Song.where(:song_name => song_info[:song_name]).first_or_create.update(song_info)
     #   end
     # end
 
