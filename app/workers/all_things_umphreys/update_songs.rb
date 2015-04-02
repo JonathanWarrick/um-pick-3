@@ -1,22 +1,26 @@
-module UMPick3Worker
-	class UpdateSongs
-		include Sidekiq::Worker
+require 'nokogiri'
+require 'open-uri'
+require 'mechanize'
+
+module AllThingsUmphreys
+  class UpdateSongs
+    include Sidekiq::Worker
     include Sidetiq::Schedulable
 
-    recurrence { daily.hour_of_day(5) }
-
-    def perform
-    	# Loop through each row in table, getting information
-    	@doc.css("#songtable tbody tr").each do |song|
-        song_info = get_song_info(song)
-        Song.where(:song_name => song_info[:song_name]).first_or_create.update(song_info)
-      end
-    end
+    recurrence { minutely }
 
     def initialize
       # Link to songs page
       @url = "http://allthings.umphreys.com/song/"
       @doc = Nokogiri::HTML(open(@url))
+    end
+
+    def perform
+      # Loop through each row in table, getting information
+      @doc.css("#songtable tbody tr").each do |song|
+        song_info = get_song_info(song)
+        Song.where(:song_name => song_info[:song_name]).first_or_create.update(song_info)
+      end
     end
 
     def get_song_info(song)
