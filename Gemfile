@@ -26,6 +26,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # install Nokogiri, Mechanize for SCRAPING
 gem 'nokogiri'
 gem 'mechanize'
+gem 'sidekiq'
+gem 'sidetiq'
+gem 'sidekiq-failures'
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
@@ -54,6 +57,7 @@ end
 group :production do
 	gem 'rails_12factor'
 	gem 'unicorn'
+  gem 'honeybadger'
 end
 
 
