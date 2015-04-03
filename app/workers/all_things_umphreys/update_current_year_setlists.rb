@@ -14,11 +14,9 @@ module AllThingsUmphreys
     end
 
     def perform
-      # Loop through each row in table, getting information
       @doc.css(".setlist").each do |show|
         show_info = get_show_info(show)
-        Show.where().first_or_create.update(show_info)
-        Song.where(:song_name => song_info[:song_name]).first_or_create.update(song_info)
+        create_or_update_show(show_info)
       end
     end
 
@@ -39,45 +37,21 @@ module AllThingsUmphreys
       show_object
     end
 
-    def populate_setlist_info
+    def create_or_update_show(show_info)
+      shows = Show.where(
+        :date_of_show => show_info[:date_of_show], 
+        :show_venue => show_info[:show_venue],
+        :show_state => show_info[:show_state],
+        :show_country => show_info[:show_country]
+      )
+      if shows.count <= 1
+        shows.first_or_create.update(show_info)
+      else
+        shows.where("songs_played[1] = ?", show_info[:shows_played][0]).update(song_info)
+      end
     end
 
+    def populate_setlist_info
+    end
   end
 end
-
-
-
-
-
-
-
-    #     song_info = get_song_info(song)
-        Song.where(:song_name => song_info[:song_name]).first_or_create.update(song_info)
-    #   end
-    # end
-
-    # def get_song_info(song)
-    #   song_object = {
-    #     :song_name => get_full_song_name(song.at_css("td:nth-child(1) a").text),
-    #     :song_artist => song.at_css("td:nth-child(2)").text,
-    #     :times_played => song.at_css("td:nth-child(3)").text,
-    #     :debut_date => song.at_css("td:nth-child(4) a").text,
-    #     :last_played_date => song.at_css("td:nth-child(5) a").text
-    #   }
-    #   song_object
-    # end
-
-    # def get_full_song_name(song_name)
-    #   if song_name[-3..-1] == "..."
-    #     @agent = Mechanize.new
-    #     actual_song_name = @agent.get(@url).links_with(:text => song_name)[0].click.search(".splashtitle").text.gsub("Songs > ", "")
-    #     actual_song_name
-    #   else
-    #     song_name
-    #   end
-    # end
-  end
-end
-
-
-
