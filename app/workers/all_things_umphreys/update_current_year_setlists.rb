@@ -16,7 +16,8 @@ module AllThingsUmphreys
     def perform
       @doc.css(".setlist").each do |show|
         show_info = get_show_info(show)
-        create_or_update_show(show_info)
+        current_show = create_or_update_show(show_info)
+        populate_setlist_info(current_show)
       end
     end
 
@@ -32,7 +33,9 @@ module AllThingsUmphreys
         :show_state => show.at_css("a:nth-child(4)").text,
         :show_country => show.at_css("a:nth-child(5)").text,
         :songs_played => songs_played.uniq! || songs_played,
-        :atu_link => "allthings.umphreys.com#{show.at_css(".setlistdate").href}"
+        :atu_link => "allthings.umphreys.com#{show.at_css(".setlistdate").attributes["href"].value}",
+        :is_graded => false,
+        :has_happened => true
       }
       show_object
     end
@@ -40,18 +43,21 @@ module AllThingsUmphreys
     def create_or_update_show(show_info)
       shows = Show.where(
         :date_of_show => show_info[:date_of_show], 
-        :show_venue => show_info[:show_venue],
-        :show_state => show_info[:show_state],
-        :show_country => show_info[:show_country]
+        :show_venue => show_info[:show_venue]
       )
       if shows.count <= 1
-        shows.first_or_create.update(show_info)
+        shows.first_or_create.update!(show_info)
+        Show.find_by_date_of_show_and_show_venue(show_info[:date_of_show], show_info[:show_venue])
       else
-        shows.where("songs_played[1] = ?", show_info[:shows_played][0]).update(song_info)
+        current_show = shows.where("songs_played[1] = ?", show_info[:shows_played][0]).update!(song_info)
       end
     end
 
-    def populate_setlist_info
+    def populate_setlist_info(current_show)
+      current_show[:songs_played].each_with_index do |song, index|
+        opener_flag = index == 0 ? true : false
+        current_show.song_shows.where(song_id: Song.find_by(song_name: song).id).first_or_create.update!(song_id: Song.find_by(song_name: song).id, is_opener: opener_flag)
+      end
     end
   end
 end
